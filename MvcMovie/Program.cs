@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MvcMovie.Data;
+using MvcMovie.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,11 +12,20 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Initialize database with seed data using SeedData class
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();
